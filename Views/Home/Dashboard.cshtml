@@ -1,0 +1,39 @@
+@model List<Vacation>
+
+<h1>Welcome @ViewBag.Otter.Name!!!!</h1>
+<a href="/vacation/new" class="btn btn-info">Plan Vacation</a>
+
+<div class="row">
+    @foreach( Vacation v in @Model)
+    {
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card">
+                <img src="@v.ImgUrl" class="card-img-top hidden" alt="@v.Destination">
+                <div class="card-body">
+                    <a href="/vacation/@v.VacationId" class="text-dark">
+                        <h2 class="card-title">@v.Destination</h2>
+                    </a>
+                    <p>Start Date: @v.StartDate</p>
+                    <p>For @v.NumberDays day(s)</p>
+                    <p># of Guests: @v.GroupMembers.Count</p>
+                    @* display a cancel button if the otter is the planner *@
+                    @if(v.Planner.OtterId == ViewBag.Otter.OtterId)
+                    {
+                        <a href="/delete/@v.VacationId/vacation" class="btn btn-danger">Cancel Trip</a>
+                    }
+                    else
+                    {
+                        if(v.GroupMembers.Any( a => a.OtterId == ViewBag.Otter.OtterId))
+                        {
+                            <a href="/leave/@v.VacationId/@ViewBag.Otter.OtterId" class="btn btn-warning">Leave Trip</a>
+                        }
+                        else
+                        {
+                            <a href="/join/@v.VacationId/@ViewBag.Otter.OtterId" class="btn btn-primary">Join Trip</a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
